@@ -8,10 +8,10 @@ grazing-incidence and fibre X-ray scattering data.
 
 Example usage:
 
-import pygix
+    import pygix
+    
+    pg = pygix.Transform()
+    pg.load('detector_calibration.poni')
+    pg.indcident_angle = 0.2
 
-pg = pygix.Transform()
-pg.load('detector_calibration.poni')
-pg.indcident_angle = 0.2
-
-i, qxy, qz = pg.transform_reciprocal(data)
+    i, qxy, qz = pg.transform_reciprocal(data)
