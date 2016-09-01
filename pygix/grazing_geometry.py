@@ -1,27 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-import matplotlib.pyplot as plt
 
-__author__ = "Thomas Dane, Jerome Kieffer"
-__contact__ = "dane@esrf.fr"
-__license__ = "GPLv3+"
-__copyright__ = "ESRF - The European Synchrotron, Grenoble, France"
-__date__ = "18/11/2014"
-__status__ = "Development"
-__docformat__ = "restructuredtext"
-
-import threading
 import logging
-
-logger = logging.getLogger("pygix.grazing_geometry")
 import numpy as np
 from numpy import pi, radians, sin, cos, sqrt, arcsin, arctan2
 
 from pyFAI.geometry import Geometry
-from pyFAI import detectors, utils
-
-from . import grazing_units
 
 try:
     from pyFAI.geometry import bilinear
@@ -32,6 +16,8 @@ try:
     from pyFAI.fastcrc import crc32
 except ImportError:
     from zlib import crc32
+
+logger = logging.getLogger("pygix.grazing_geometry")
 
 
 class GrazingGeometry(Geometry):
