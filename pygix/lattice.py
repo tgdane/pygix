@@ -23,7 +23,7 @@ determination of the crystallographic UB orientation matrix.[3]
 
 References:
     [1] Smilgies and Blasini, J. Appl. Crystallogr., (2007), 40, 716.
-    [2] Busing and Levy, Acta Crystallogr., 1967, 22, 457.
+    [2] Busing and Levy, Acta Crystallogr., (1967), 22, 457.
     [3] Dane et al, Soft Matter, (2013), 9, 10501.
 """
 
