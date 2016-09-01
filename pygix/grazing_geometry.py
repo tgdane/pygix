@@ -261,7 +261,7 @@ class GrazingGeometry(Geometry):
             param (list): pyFAI poni geometry parameters
 
         Returns:
-            wavevectors (tuple of floats or arrays):
+            wavevectors (tuple of floats or arrays): corrected kf (x, y, z)
         """
         if param is None:
             param = self.param
@@ -274,12 +274,13 @@ class GrazingGeometry(Geometry):
         """
         Calculate qx, qy, qz corrected for tilt and incident angle.
 
-        @param d1: position(s) in pixel in first dimension (c order)
-        @type d1: scalar or array of scalar
-        @param d2: position(s) in pixel in second dimension (c order)
-        @type d2: scalar or array of scalar
-        @return: q
-        @rtype: float or array of floats (x, y, z).
+        Args:
+            d1 (scalar or array): position(s) in pixel in first dimension
+            d2 (scalar or array): position(s) in pixel in second dimension
+            param (list): pyFAI poni geometry parameters
+
+        Returns:
+            wavevectors (tuple of floats or arrays): corrected q (x, y, z)
         """
         if param is None:
             param = self.param
@@ -293,32 +294,33 @@ class GrazingGeometry(Geometry):
         """
         Calculate exit angles alpha_f and 2theta_f.
 
-        @param d1: position(s) in pixel in first dimension (c order)
-        @type d1: scalar or array of scalar
-        @param d2: position(s) in pixel in second dimension (c order)
-        @type d2: scalar or array of scalar
-        @return: scattering angles
-        @rtype: float or array of floats (alpha_f, 2theta_f).
+        Args:
+            d1 (scalar or array): position(s) in pixel in first dimension
+            d2 (scalar or array): position(s) in pixel in second dimension
+            param (list): pyFAI poni geometry parameters
+
+        Returns:
+            scattering angles (tuple of floats or arrays): (alpha_f, 2theta_f)
         """
         kfx, kfy, kfz = self.calc_kf_xyz(d1, d2, param)
-        # kfxy = sqrt(kfx**2 + kfy**2)*np.sign(kfy) not needed if I am correct below...
+        # kfxy = sqrt(kfx**2 + kfy**2)*np.sign(kfy) not needed if below...
 
-        alpf = arctan2(kfz, kfx)
-        tthf = arctan2(kfy, kfx)
-        return alpf, tthf
+        alp_f = arctan2(kfz, kfx)
+        tth_f = arctan2(kfy, kfx)
+        return alp_f, tth_f
 
     def calc_q(self, d1, d2, param=None):
         """
-        Calculate qz, qxy.
+        Calculate corrected qz, qxy.
 
-        @param d1: position(s) in pixel in first dimension (c order)
-        @type d1: scalar or array of scalar
-        @param d2: position(s) in pixel in second dimension (c order)
-        @type d2: scalar or array of scalar
-        @return: q
-        @rtype: float or array of floats (qz, qxy).
+        Args:
+            d1 (scalar or array): position(s) in pixel in first dimension
+            d2 (scalar or array): position(s) in pixel in second dimension
+            param (list): pyFAI poni geometry parameters
+
+        Returns:
+            wavevectors (tuple of floats or arrays): corrected q (z, xy)
         """
-
         qx, qy, qz = self.calc_q_xyz(d1, d2, param)
         if not self.useqx:
             return qz, qy
@@ -328,8 +330,15 @@ class GrazingGeometry(Geometry):
 
     def calc_q_corner(self, d1, d2):
         """
-        Returns (qz, qxy) for the corner of a given pixel
-        (or set of pixels) in (0.01*nm^-1).
+        Returns (qz, qxy) for the corner of a given pixel (or set of pixels) in
+        in (0.01*nm^-1).
+
+        Args:
+            d1:
+            d2:
+
+        Returns:
+
         """
         return self.calc_q(d1 - 0.5, d2 - 0.5)
 
