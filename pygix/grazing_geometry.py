@@ -168,17 +168,18 @@ class GrazingGeometry(Geometry):
     #   Geometry calculations for grazing-incidence transformations
     # --------------------------------------------------------------------------
 
-    def calc_kfzero(self, d1, d2, param=None):
+    def calc_kf_zero(self, d1, d2, param=None):
         """
-        Calculate exit wavevectors kfx, kfy and kfz as if tilt and incident angle
-        were zero.
-        
-        @param d1: position(s) in pixel in first dimension (c order)
-        @type d1: scalar or array of scalar
-        @param d2: position(s) in pixel in second dimension (c order)
-        @type d2: scalar or array of scalar
-        @return: q 
-        @rtype: float or array of floats (x, y, z).
+        Calculate exit wavevectors kfx0, kfy0 and kfz0 as if tilt and incident
+        angle were zero.
+
+        Args:
+            d1 (scalar or array): position(s) in pixel in first dimension
+            d2 (scalar or array): position(s) in pixel in second dimension
+            param (list): pyFAI poni geometry parameters
+
+        Returns:
+            wavevectors (tuple of floats or arrays):
         """
         if not self.wavelength:
             raise RuntimeError(("Scattering vector cannot be calculated"
@@ -194,19 +195,20 @@ class GrazingGeometry(Geometry):
 
         return kfx0, kfy0, kfz0
 
-    def calc_qzero(self, d1, d2, param=None):
+    def calc_q_zero(self, d1, d2, param=None):
         """
-        Calculate qx, qy and qz as if tilt and incident angle were
-        zero.
-        
-        @param d1: position(s) in pixel in first dimension (c order)
-        @type d1: scalar or array of scalar
-        @param d2: position(s) in pixel in second dimension (c order)
-        @type d2: scalar or array of scalar
-        @return: q 
-        @rtype: float or array of floats (x, y, z).
+        Calculate q wavevectors qx0, qy0 and qz0 as if tilt and incident angle
+        were zero.
+
+        Args:
+            d1 (scalar or array): position(s) in pixel in first dimension
+            d2 (scalar or array): position(s) in pixel in second dimension
+            param (list): pyFAI poni geometry parameters
+
+        Returns:
+            wavevectors (tuple of floats or arrays):
         """
-        kfx0, qy0, qz0 = self.calc_kfzero(d1, d2, param)
+        kfx0, qy0, qz0 = self.calc_kf_zero(d1, d2, param)
         wavevector = 1.0e-11 * 2 * pi / self.wavelength
         qx0 = kfx0 - wavevector
         return qx0, qy0, qz0
@@ -214,16 +216,15 @@ class GrazingGeometry(Geometry):
     def rotate_wavevectors(self, x, y, z):
         """
         Generic function to rotate wavevectors by incident and tilt angles.
-        Called to calculate q and kf (for angular calculations).
+        Called to calculate q (and kf for angular calculations).
 
-        @param x: position(s) in vector space along x axis
-        @type x: scalar or array of scalar
-        @param y: position(s) in vector space along y axis
-        @type y: scalar or array of scalar
-        @param z: position(s) in vector space along z axis
-        @type z: scalar or array of scalar
-        @return: rotated wavevectors
-        @type: float or array of floats (x, y, z)
+        Args:
+            x (scalar or array): position(s) in vector space along x axis
+            y (scalar or array): position(s) in vector space along y axis
+            z (scalar or array): position(s) in vector space along z axis
+
+        Returns:
+            wavevectors (float or array): rotated wavevectors
         """
         if self.sample_orientation is None:
             raise RuntimeError(("Cannot calculate without"
@@ -247,29 +248,29 @@ class GrazingGeometry(Geometry):
             wave_x = x * cos_ai + z * cos_ep * sin_ai + y * sin_ep * sin_ai
             wave_y = y * cos_ep - z * sin_ep
             wave_z = z * cos_ep * cos_ai + y * cos_ai * sin_ep - x * sin_ai
-
         return wave_x, wave_y, wave_z
 
-    def calc_kfxyz(self, d1, d2, param=None):
+    def calc_kf_xyz(self, d1, d2, param=None):
         """
         Calculate exit wavevectors kfx, kfy, kfz corrected for tilt
         and incident angle. Used for angular calculations.
 
-        @param d1: position(s) in pixel in first dimension (c order)
-        @type d1: scalar or array of scalar
-        @param d2: position(s) in pixel in second dimension (c order)
-        @type d2: scalar or array of scalar
-        @return: kf
-        @rtype: float or array of floats (x, y, z).
+        Args:
+            d1 (scalar or array): position(s) in pixel in first dimension
+            d2 (scalar or array): position(s) in pixel in second dimension
+            param (list): pyFAI poni geometry parameters
+
+        Returns:
+            wavevectors (tuple of floats or arrays):
         """
         if param is None:
             param = self.param
 
-        kfx0, kfy0, kfz0 = self.calc_kfzero(d1, d2, param)
+        kfx0, kfy0, kfz0 = self.calc_kf_zero(d1, d2, param)
         kfx, kfy, kfz = self.rotate_wavevectors(kfx0, kfy0, kfz0)
         return kfx, kfy, kfz
 
-    def calc_qxyz(self, d1, d2, param=None):
+    def calc_q_xyz(self, d1, d2, param=None):
         """
         Calculate qx, qy, qz corrected for tilt and incident angle.
 
@@ -283,7 +284,7 @@ class GrazingGeometry(Geometry):
         if param is None:
             param = self.param
 
-        qx0, qy0, qz0 = self.calc_qzero(d1, d2, param)
+        qx0, qy0, qz0 = self.calc_q_zero(d1, d2, param)
         qx, qy, qz = self.rotate_wavevectors(qx0, qy0, qz0)
 
         return qx, qy, qz
@@ -299,7 +300,7 @@ class GrazingGeometry(Geometry):
         @return: scattering angles
         @rtype: float or array of floats (alpha_f, 2theta_f).
         """
-        kfx, kfy, kfz = self.calc_kfxyz(d1, d2, param)
+        kfx, kfy, kfz = self.calc_kf_xyz(d1, d2, param)
         # kfxy = sqrt(kfx**2 + kfy**2)*np.sign(kfy) not needed if I am correct below...
 
         alpf = arctan2(kfz, kfx)
@@ -318,7 +319,7 @@ class GrazingGeometry(Geometry):
         @rtype: float or array of floats (qz, qxy).
         """
 
-        qx, qy, qz = self.calc_qxyz(d1, d2, param)
+        qx, qy, qz = self.calc_q_xyz(d1, d2, param)
         if not self.useqx:
             return qz, qy
         else:
@@ -735,7 +736,7 @@ class GrazingGeometry(Geometry):
         # print inshape, npt, bins_x.shape, bins_y.shape
 
         with self._sem:
-            qx, qy, qz = np.fromfunction(self.calc_qxyz, inshape,
+            qx, qy, qz = np.fromfunction(self.calc_q_xyz, inshape,
                                          dtype=np.float32)
 
         # print 'qx.shape, qy.shape, qz.shape'
