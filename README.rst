@@ -17,3 +17,13 @@ Example usage:
     pg.indcident_angle = 0.2
     
     i, qxy, qz = pg.transform_reciprocal(data)
+..
+
+Installation
+----
+Download the repository::
+
+    git clone http://github.com/tgdane/pygix.git
+    cd pygix
+    python setup.py install
+

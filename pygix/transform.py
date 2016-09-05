@@ -1,14 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# REQUIRES pyFAI v 0.10 or greater 
 
-__author__ = "Thomas Dane, Jerome Kieffer"
-__contact__ = "dane@esrf.fr"
-__license__ = "GPLv3+"
-__copyright__ = "ESRF - The European Synchrotron, Grenoble, France"
-__date__ = "18/11/2014"
-__status__ = "Development"
-__docformat__ = "restructuredtext"
+"""
+Main module of pygix that users will interact with.
+"""
 
 import os
 import logging
@@ -818,7 +813,6 @@ class Transform(GrazingGeometry):
                         reset = "y_range requested and LUT's y_range don't match"
                 error = False
                 if reset:
-                    print reset
                     logger.info("pygix.Transform.transform_image: Resetting transformer because %s" % reset)
                     try: 
                         lut_gi_transformer, def_ip, def_op = \
@@ -1124,14 +1118,33 @@ class Transform(GrazingGeometry):
                        method="splitpix", unit=grazing_units.Q, 
                        normalization_factor=None):
         """
-        Sector integration wrapper for integrate_1d. More intuatively
-        for GIXS data, the function takes chi_pos and chi_width, 
-        instead of chi_min, chi_max. Chi = 0 is defined as surface
-        normal. E.g. out-of-plane (qz) line profile would be at chi = 0
-        with the angular opening of the sector given by chi_width.
+        Sector integration. The function takes chi_pos (the centre angle of
+        the sector and chi_width (the angular opening of the sector). Chi = 0 is
+        defined as along the surface normal, e.g., out-of-plane (qz) line
+        profile would be at chi = 0 with the angular opening of the sector given
+        by chi_width.
 
-        Parameters
-        ----------
+        Args:
+            data:
+            npt:
+            filename:
+            correctSolidAngle:
+            variance:
+            error_model:
+            chi_pos:
+            chi_width:
+            radial_range:
+            mask:
+            dummy:
+            delta_dummy:
+            polarization_factor:
+            dark:
+            flat:
+            method:
+            unit:
+            normalization_factor:
+
+        Returns:
 
         """
         if chi_width is not None:
@@ -1305,65 +1318,59 @@ class Transform(GrazingGeometry):
         efault. Based on pyFAI integrate1d. Multi algorithm 
         implementation (tries to be bullet proof).
 
-        Parameters
-        ----------
-        data : ndarray
-            2D array from detector (raw image).
-        npt : int
-            Number of points in output data.
-        filename : str
-            Output filename in 2/3 column ascii format.
-        correctSolidAngle : bool
-            Correct for solid angle of each pixel if True.
-        variance : ndarray
-            Array containing the variance of the data. If not 
-            available, no error propagation is done.
-        error_model : str
-            When variance is unknown, an error model can be given: 
-            "poisson" (variance = I), "azimuthal" (variance = 
-            (I-<I>)^2).
-        p0_range : (float, float), optional
-            The lower and upper unit of the radial unit. If not 
-            provided, range is simply (data.min(), data.max()). Values
-            outside the range are ignored.
-        p1_range : (float, float), optional
-            The lower and upper range of the azimuthal angle in degree.
-            If not provided, range is simply (data.min(), data.max()). 
-            Values outside the range are ignored.
-        mask : ndarray
-            Masked pixel array (same size as image) with 1 for masked 
-            pixels and 0 for valid pixels.
-        dummy : float
-            Value for dead/masked pixels.
-        delta_dummy : float
-            Precision for dummy value
-        polarization_factor : float
-            Polarization factor between -1 and +1. 0 for no correction.
-        dark : ndarray
-            Dark current image.
-        flat : ndarray
-            Flat field image.
-        method : str
-            Integration method. Can be "np", "cython", "bbox",
-            "splitpix", "lut" or "lut_ocl" (if you want to go on GPU).
-        unit : str
-            Radial units. Can be "2th_deg", "2th_rad", "q_nm^-1" or
-            "q_A^-1" (TTH_DEG, TTH_RAD, Q_NM, Q_A).
-        safe : bool
-            Do some extra check to ensure LUT is still valid. False is
-            faster.
-        normalization_factor : float
-            Value of a normalization monitor.
+        Args:
+            data (ndarray): 2D array from detector (raw image).
+            npt (int): Number of points in output data.
+            filename (str): Output filename in 2/3 column ascii format.
+            correctSolidAngle (bool): Correct for solid angle of each pixel.
+            variance : ndarray
+                Array containing the variance of the data. If not
+                available, no error propagation is done.
+            error_model : str
+                When variance is unknown, an error model can be given:
+                "poisson" (variance = I), "azimuthal" (variance =
+                (I-<I>)^2).
+            p0_range : (float, float), optional
+                The lower and upper unit of the radial unit. If not
+                provided, range is simply (data.min(), data.max()). Values
+                outside the range are ignored.
+            p1_range : (float, float), optional
+                The lower and upper range of the azimuthal angle in degree.
+                If not provided, range is simply (data.min(), data.max()).
+                Values outside the range are ignored.
+            mask : ndarray
+                Masked pixel array (same size as image) with 1 for masked
+                pixels and 0 for valid pixels.
+            dummy : float
+                Value for dead/masked pixels.
+            delta_dummy : float
+                Precision for dummy value
+            polarization_factor : float
+                Polarization factor between -1 and +1. 0 for no correction.
+            dark : ndarray
+                Dark current image.
+            flat : ndarray
+                Flat field image.
+            method : str
+                Integration method. Can be "np", "cython", "bbox",
+                "splitpix", "lut" or "lut_ocl" (if you want to go on GPU).
+            unit : str
+                Radial units. Can be "2th_deg", "2th_rad", "q_nm^-1" or
+                "q_A^-1" (TTH_DEG, TTH_RAD, Q_NM, Q_A).
+            safe : bool
+                Do some extra check to ensure LUT is still valid. False is
+                faster.
+            normalization_factor : float
+                Value of a normalization monitor.
 
-         Returns
-        -------
-        qAxis, I : 2-tuple of ndarrays
-            Radial bins and integrated intensity.
+        Returns:
+            qAxis, I : 2-tuple of ndarrays
+                Radial bins and integrated intensity.
 
-        or
-        
-        qAxis, I, sigma : 3-tuple of ndarrays
-            Radial bins, integrated intensity and error.
+            or
+
+            qAxis, I, sigma : 3-tuple of ndarrays
+                Radial bins, integrated intensity and error.
         """
         method = method.lower()
         unit = grazing_units.to_unit(unit)
