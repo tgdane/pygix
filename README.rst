@@ -39,11 +39,11 @@ azimuthal integration [4]_.
 
 References:
 ----
-.. [1] N. Stribeck and U. Nöchel, J. Appl. Crystallogr., (2009), 42, 295–301.
+.. [1] N. Stribeck and U. Nöchel, J. Appl. Crystallogr., (2009), 42, 295–301
 .. [2] M. Polanyi, Z. Physik, (1921), 7, 149-180
 .. [3] S. Lilliu and T. Dane, 	arXiv:1511.06224 [cond-mat.soft]
 .. [4] G. Ashiotis, A. Deschildre, Z. Nawaz, J. P. Wright, D. Karkoulis, F. E.
-        Picca and J. Kieffer, J. Appl. Crystallogr., 2015, 48, 510–519.
+        Picca and J. Kieffer, J. Appl. Crystallogr., 2015, 48, 510–519
         (https://github.com/silx-kit/pyFAI/)
 
 Installation
