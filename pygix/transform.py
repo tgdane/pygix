@@ -1770,7 +1770,7 @@ class Transform(GrazingGeometry):
             if sigma is not None:
                 sigma /= normalization_factor
 
-        self.save_1d(filename, I, qAxis, sigma, unit,
+        self.save1D(filename, I, qAxis, sigma, unit,
                      dark=dark, flat=flat,
                      polarization_factor=polarization_factor,
                      normalization_factor=normalization_factor)
