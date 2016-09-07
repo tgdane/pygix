@@ -23,8 +23,8 @@ class Writer(object):
         self._header = None
         self._already_written = False
 
-    def make_headers(self, hdr="#", has_dark=False, has_flat=False,
-                     polarization_factor=None, normalization_factor=None):
+    def make_header(self, hdr="#", has_dark=False, has_flat=False,
+                    polarization_factor=None, normalization_factor=None):
         """
         Make headers for data file.
 
@@ -290,7 +290,7 @@ class Writer(object):
         """
         # x_unit = grazing_units.to_unit(x_unit)
         with open(filename, "w") as f:
-            f.write(self.make_headers(
+            f.write(self.make_header(
                 has_dark=has_dark, has_flat=has_flat,
                 polarization_factor=polarization_factor,
                 normalization_factor=normalization_factor))
