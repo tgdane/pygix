@@ -1108,10 +1108,9 @@ class Transform(GrazingGeometry):
 
         self._last_method = method
 
-        self.save_transformed(filename, I, bins_x, bins_y,
-                              sigma, unit, dark=dark, flat=flat,
-                              polarization_factor=polarization_factor,
-                              normalization_factor=normalization_factor)
+        self.save2D(filename, I, bins_x, bins_y, sigma,
+                    dark is not None, flat is not None,
+                    polarization_factor, normalization_factor)
 
         if all:
             res = {"I": I,
@@ -1770,15 +1769,41 @@ class Transform(GrazingGeometry):
             if sigma is not None:
                 sigma /= normalization_factor
 
-        self.save1D(filename, I, qAxis, sigma, unit,
-                     dark=dark, flat=flat,
-                     polarization_factor=polarization_factor,
-                     normalization_factor=normalization_factor)
+        self.save1D(filename, qAxis, I, sigma, unit,
+                    dark is not None, flat is not None,
+                    polarization_factor=polarization_factor,
+                    normalization_factor=normalization_factor)
 
         if sigma is not None:
             return I, qAxis, sigma
         else:
             return I, qAxis
+
+    def save2D(self, filename, intensity, x_scale, y_scale, error=None,
+               has_dark=False, has_flat=False,
+               polarization_factor=None, normalization_factor=None):
+        """
+
+        Args:
+            filename:
+            intensity:
+            x_scale:
+            y_scale:
+            error:
+            has_dark:
+            has_flat:
+            polarization_factor:
+            normalization_factor:
+
+        Returns:
+
+        """
+        if not filename:
+            return
+        writer = io.Writer(self, None)
+        writer.save2D(filename, intensity, x_scale, y_scale, error,
+                      has_dark, has_flat, polarization_factor,
+                      normalization_factor)
 
     def save1D(self, filename, x_scale, intensity, error=None,
                x_unit=grazing_units.Q,
@@ -1808,7 +1833,7 @@ class Transform(GrazingGeometry):
         """
         if not filename:
             return
-        writer = io.Writer(None, self)
+        writer = io.Writer(self, None)
         writer.save1D(filename, x_scale, intensity, error, x_unit,
                       has_dark, has_flat, polarization_factor,
                       normalization_factor)

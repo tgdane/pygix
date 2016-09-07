@@ -10,6 +10,10 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 packages=find_packages(exclude=['docs', 'tests'])
 
+print '*'*80
+print packages
+print '*'*80
+
 # double check classifiers on https://pypi.python.org/pypi?%3Aaction=list_classifiers
 classifiers = ["Development Status :: 4 - Beta",
                "Intended Audience :: Developers",
@@ -31,7 +35,7 @@ setup_requires = ["numpy", "cython", "pyFAI"]
 
 setup(
     name='pygix',
-    version='0.1.2',    
+    version='0.1.3',
     description='Reduction of 2D Grazing-incidence and fibre diffraction data',
     long_description=long_description,
     url='https://github.com/tgdane/pygix',
@@ -40,8 +44,8 @@ setup(
     licence="GPL",
     classifiers=classifiers,
     packages=packages,
-    install_requires=install_requires,
-    setup_requires=setup_requires
+    # install_requires=install_requires,
+    # setup_requires=setup_requires
     )
 
 
