@@ -80,8 +80,10 @@ def quadrant_average(data, x=None, y=None, dummy=0):
     quad3 = data[ycen:, xcen:]
     quad4 = np.flipud(data[0:ycen, xcen:])
 
-    quad_shapey = max(data.shape[0] - ycen, data.shape[0] - (data.shape[0] - ycen))
-    quad_shapex = max(data.shape[1] - xcen, data.shape[1] - (data.shape[1] - xcen))
+    quad_shapey = max(data.shape[0] - ycen,
+                      data.shape[0] - (data.shape[0] - ycen))
+    quad_shapex = max(data.shape[1] - xcen,
+                      data.shape[1] - (data.shape[1] - xcen))
     mask = np.zeros((quad_shapey, quad_shapex))
     out = np.zeros((quad_shapey, quad_shapex))
 
@@ -126,7 +128,8 @@ def sector_roi(chi_pos=None, chi_width=None, radial_range=None):
     Returns:
         qr, qz (tuple of ndarrays): arrays defining the region of interest.
     """
-    if (len([x for x in [chi_pos, chi_width, radial_range] if x is not None]) is 0) \
+    if (len([x for x in [chi_pos, chi_width, radial_range] if
+             x is not None]) is 0) \
             or (radial_range is None):
         raise RuntimeError('Integration over whole image, no ROI to display.')
     return _calc_sector(radial_range, chi_pos, chi_width)
@@ -240,7 +243,7 @@ def _calc_box(ip_range, op_range):
     Called by op_box_roi and ip_box_roi.
 
     Args:
-        ip_range (tuple): in-plane (min, max).
+         ip_range (tuple): in-plane (min, max).
         op_range (tuple): out-of-plane (min, max).
 
     Returns:
