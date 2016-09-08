@@ -14,10 +14,12 @@ to be as generic as possible, i.e., it makes no assumptions about the data
 (passed by the user as numpy arrays) and all detector and geometric corrections
 can be handled at the point of data reduction.
 
-.
+----
 
 Please refer to the `wiki <https://github.com/tgdane/pygix/wiki>`_ for more
 detailed discussion!
+
+----
 
 Example usage:
 
@@ -28,7 +30,8 @@ Example usage:
     pg = pygix.Transform()
     pg.load('detector_calibration.poni')
     pg.indcident_angle = 0.2
-    
+
+    # transform image into reciprocal space:
     i, qxy, qz = pg.transform_reciprocal(data)
 ..
 
