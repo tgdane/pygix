@@ -35,24 +35,24 @@ Example usage:
     i, qxy, qz = pg.transform_reciprocal(data)
 ..
 
-Pygix uses the fiber transformation originally described by Stribeck [1]_ (based
-on earlier work by Polayni [2]_), which has recently been formulated for the case
-of grazing-incidence scattering [3]_. The reciprocal space transformation for the
+Pygix uses the fiber transformation originally described by Stribeck [1] (based
+on earlier work by Polayni [2]), which has recently been formulated for the case
+of grazing-incidence scattering [3]. The reciprocal space transformation for the
 fiber and grazing-incidence X-ray scattering are thus equivalent, meaning this
 python library is generic for both classes of experiments.
 
 Pygix is heavily based on the pyFAI library for conventional 2D transmission
-azimuthal integration [4]_.
+azimuthal integration [4].
 
 
 References:
 ----
-.. [1]  N. Stribeck and U. Nöchel, J. Appl. Crystallogr., (2009), 42, 295–301
-.. [2]  M. Polanyi, Z. Physik, (1921), 7, 149-180
-.. [3]  S. Lilliu and T. Dane, 	arXiv:1511.06224 [cond-mat.soft]
-.. [4]  G. Ashiotis, A. Deschildre, Z. Nawaz, J. P. Wright, D. Karkoulis, F. E.
-        Picca and J. Kieffer, J. Appl. Crystallogr., 2015, 48, 510–519
-        (https://github.com/silx-kit/pyFAI/)
+1.  N. Stribeck and U. Nöchel, J. Appl. Crystallogr., (2009), 42, 295–301
+2.  M. Polanyi, Z. Physik, (1921), 7, 149-180
+3.  S. Lilliu and T. Dane, 	arXiv:1511.06224 [cond-mat.soft]
+4.  G. Ashiotis, A. Deschildre, Z. Nawaz, J. P. Wright, D. Karkoulis, F. E.
+    Picca and J. Kieffer, J. Appl. Crystallogr., 2015, 48, 510–519
+    (https://github.com/silx-kit/pyFAI/)
 
 Installation
 ----
