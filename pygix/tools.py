@@ -140,7 +140,7 @@ def sector_roi(chi_pos=None, chi_width=None, radial_range=None, filename=None):
     Returns:
         qr, qz (tuple of ndarrays): arrays defining the region of interest.
     """
-    param = locals()
+    param = locals()  # passed only to io to write key, val in the header
     param.pop('filename')
 
     if (len([x for x in [chi_pos, chi_width, radial_range] if
@@ -166,7 +166,7 @@ def chi_roi(radial_pos, radial_width, chi_range=None, filename=None):
     Returns:
         qr, qz (tuple of ndarrays): arrays defining the region of interest.
     """
-    param = locals()
+    param = locals()  # passed only to io to write key, val in the header
     param.pop('filename')
 
     if (chi_range is None) or (chi_range[0] + chi_range[1] is 360):
@@ -197,7 +197,7 @@ def op_box_roi(ip_pos, ip_width, op_range, filename=None):
     Returns:
         qr, qz (tuple of ndarrays): arrays defining the region of interest.
     """
-    param = locals()
+    param = locals()  # passed only to io to write key, val in the header
     param.pop('filename')
 
     ip_min = ip_pos - ip_width / 2.0
@@ -221,7 +221,7 @@ def ip_box_roi(op_pos, op_width, ip_range, filename=None):
     Returns:
         qr, qz (tuple of ndarrays): arrays defining the region of interest.
     """
-    param = locals()
+    param = locals()  # passed only to io to write key, val in the header
     param.pop('filename')
 
     op_min = op_pos - op_width / 2.0
