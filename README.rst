@@ -14,6 +14,9 @@ to be as generic as possible, i.e., it makes no assumptions about the data
 (passed by the user as numpy arrays) and all detector and geometric corrections
 can be handled at the point of data reduction.
 
+Please refer to the [wiki](https://github.com/tgdane/pygix/wiki ) for more
+detailed discussion!
+
 Example usage:
 
 .. code-block:: python
