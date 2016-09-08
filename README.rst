@@ -1,4 +1,4 @@
-pygix - Reduction of 2D grazing-incidence and fiber X-ray scattering data
+pygix
 ====
 
 Pygix is a generic python library for performing reduction of 
