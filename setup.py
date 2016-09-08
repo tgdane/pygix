@@ -10,10 +10,6 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 packages=find_packages(exclude=['docs', 'tests'])
 
-print '*'*80
-print packages
-print '*'*80
-
 # double check classifiers on https://pypi.python.org/pypi?%3Aaction=list_classifiers
 classifiers = ["Development Status :: 4 - Beta",
                "Intended Audience :: Developers",
