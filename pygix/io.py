@@ -19,7 +19,6 @@ class Writer(object):
         Returns:
 
         """
-        print pg
         self._pg = pg
         self._filename = filename
         self._hdr_dict = None
@@ -81,15 +80,25 @@ class Writer(object):
             self._hdr_dict = hdr_dict
         return self._hdr_dict
 
-    def header_dict_to_string(self, header_dict=None, hdr_key='#'):
+    def make_header_string(self, header_dict=None, hdr_key='#',
+                           has_dark=False, has_flat=False,
+                           polarization_factor=None, normalization_factor=None):
         """
 
         Args:
             header_dict:
+            hdr_key:
+            has_dark:
+            has_flat:
+            polarization_factor:
+            normalization_factor:
 
         Returns:
 
         """
+        if (header_dict is None) and (self._hdr_dict is None):
+            self.make_header_dict(has_dark, has_flat, polarization_factor,
+                                  normalization_factor)
         if header_dict is None:
             header_dict = self._hdr_dict
 
@@ -106,7 +115,7 @@ class Writer(object):
         """
 
         Args:
-            hdr (string): string used as comment in the header.
+            hdr_key (string): string used as comment in the header.
             has_dark (bool): save the file names of dark images.
             has_flat (bool): save the file names of flat images.
             polarization_factor (float):
@@ -119,7 +128,7 @@ class Writer(object):
             if self._hdr_dict is None:
                 self.make_header_dict(has_dark, has_flat, polarization_factor,
                                       normalization_factor)
-                self._header = self.header_dict_to_string(hdr_key=hdr_key)
+                self._header = self.make_header_string(hdr_key=hdr_key)
         return self._header
 
     def save1D(self, filename, x_scale, intensity, error=None,
@@ -165,6 +174,20 @@ class Writer(object):
                has_dark=False, has_flat=False,
                polarization_factor=None, normalization_factor=None):
         """
+
+        Args:
+            filename:
+            intensity:
+            x_scale:
+            y_scale:
+            error:
+            has_dark:
+            has_flat:
+            polarization_factor:
+            normalization_factor:
+
+        Returns:
+
         """
         if self._hdr_dict is None:
             self.make_header_dict(has_dark, has_flat, polarization_factor,
@@ -199,7 +222,7 @@ def make_roi_header(**param):
     Returns:
         hdr_list (string): header data.
     """
-    hdr_list = ['=== Integration ROI ===']
+    hdr_list = ['== Integration ROI ==']
     method = [i for i in param.keys() if "pos" in i][0].split('_pos')[0]
     hdr_list.append('Integration method: {}'.format(method))
 
@@ -227,7 +250,7 @@ def save_roi(x_data, y_data, filename, **param):
 
     with open(filename, 'w') as f:
         f.write(header)
-        f.write('#%14s %14s\n' % ('x', 'y'))
+        f.write('\n#%14s %14s\n' % ('x', 'y'))
         f.write('\n'.join(
             ['%14.6e  %14.6e' % (t, i) for t, i in zip(x_data, y_data)]))
         f.write('\n')
