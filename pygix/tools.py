@@ -43,7 +43,7 @@ import numpy as np
 from . import io
 
 
-def quadrant_average(data, x=None, y=None, dummy=0):
+def quadrant_average(data, x=None, y=None, dummy=0, filename=None):
     """
     Function to perform four quadrant averaging of fiber diffraction
     patterns. If only the data array is given, the function 
@@ -63,30 +63,31 @@ def quadrant_average(data, x=None, y=None, dummy=0):
         x (ndarray): x scaling of the image.
         y (ndarray: y scaling of the image.
         dummy (int): Value of masked invalid regions.
+        filename (string): Name of file to be saved.
 
     Returns:
         out_full (ndarray): The four quadrant averaged array
     """
     if (x is not None) and (y is not None):
-        xcen = np.argmin(abs(x))
-        ycen = np.argmin(abs(y))
+        cen_x = np.argmin(abs(x))
+        cen_y = np.argmin(abs(y))
     elif (x is None) and (y is None):
-        ycen = data.shape[0] / 2.0
-        xcen = data.shape[1] / 2.0
+        cen_y = data.shape[0] / 2.0
+        cen_x = data.shape[1] / 2.0
     else:
         raise RuntimeError('Must pass both x and y scales or neither')
 
-    quad1 = np.flipud(np.fliplr(data[0:ycen, 0:xcen]))
-    quad2 = np.fliplr(data[ycen:, 0:xcen])
-    quad3 = data[ycen:, xcen:]
-    quad4 = np.flipud(data[0:ycen, xcen:])
+    quad1 = np.flipud(np.fliplr(data[0:cen_y, 0:cen_x]))
+    quad2 = np.fliplr(data[cen_y:, 0:cen_x])
+    quad3 = data[cen_y:, cen_x:]
+    quad4 = np.flipud(data[0:cen_y, cen_x:])
 
-    quad_shapey = max(data.shape[0] - ycen,
-                      data.shape[0] - (data.shape[0] - ycen))
-    quad_shapex = max(data.shape[1] - xcen,
-                      data.shape[1] - (data.shape[1] - xcen))
-    mask = np.zeros((quad_shapey, quad_shapex))
-    out = np.zeros((quad_shapey, quad_shapex))
+    quad_shape_y = max(data.shape[0] - cen_y,
+                       data.shape[0] - (data.shape[0] - cen_y))
+    quad_shape_x = max(data.shape[1] - cen_x,
+                       data.shape[1] - (data.shape[1] - cen_x))
+    mask = np.zeros((quad_shape_y, quad_shape_x))
+    out = np.zeros((quad_shape_y, quad_shape_x))
 
     out[np.where(quad1 > dummy)] += quad1[np.where(quad1 > dummy)]
     out[np.where(quad2 > dummy)] += quad2[np.where(quad2 > dummy)]
@@ -102,18 +103,27 @@ def quadrant_average(data, x=None, y=None, dummy=0):
     out[np.where(mask == 0)] = dummy
 
     out_full = np.zeros((out.shape[0] * 2, out.shape[1] * 2))
-    xcen = out_full.shape[1] / 2.0
-    ycen = out_full.shape[0] / 2.0
+    cen_x = out_full.shape[1] / 2.0
+    cen_y = out_full.shape[0] / 2.0
 
-    out_full[0:ycen, 0:xcen] = np.flipud(np.fliplr(out))
-    out_full[0:ycen, xcen:] = np.flipud(out)
-    out_full[ycen:, xcen:] = out
-    out_full[ycen:, 0:xcen] = np.fliplr(out)
+    out_full[0:cen_y, 0:cen_x] = np.flipud(np.fliplr(out))
+    out_full[0:cen_y, cen_x:] = np.flipud(out)
+    out_full[cen_y:, cen_x:] = out
+    out_full[cen_y:, 0:cen_x] = np.fliplr(out)
 
     if (x is not None) and (y is not None):
-        xout = np.linspace(-abs(x).max(), abs(x).max(), out_full.shape[1])
-        yout = np.linspace(-abs(y).max(), abs(y).max(), out_full.shape[0])
-        return out_full, xout, yout
+        out_x = np.linspace(-abs(x).max(), abs(x).max(), out_full.shape[1])
+        out_y = np.linspace(-abs(y).max(), abs(y).max(), out_full.shape[0])
+    else:
+        out_x = None
+        out_y = None
+
+    if filename is not None:
+        writer = io.Writer(None, None)
+        writer.save2D(filename, out_full, out_x, out_y)
+
+    if (out_x is not None) and (out_y is not None):
+        return out_full, out_x, out_y
     else:
         return out_full
 

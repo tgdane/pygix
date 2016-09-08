@@ -4,6 +4,7 @@
 """ input/output functions.
 """
 
+from collections import OrderedDict
 import fabio
 from . import grazing_units
 
@@ -40,11 +41,11 @@ class Writer(object):
             self._hdr_dict (OrderedDict):
         """
         if self._hdr_dict is None:
-            try:
-                from collections import OrderedDict
-                hdr_dict = OrderedDict()
-            except ImportError:
-                hdr_dict = {}
+            hdr_dict = OrderedDict()
+
+            if self._pg is None:
+                self._hdr_dict = hdr_dict
+                return self._hdr_dict
 
             pg = self._pg
             hdr_dict['== pyFAI calibration =='] = ''
@@ -169,9 +170,9 @@ class Writer(object):
                     ["%14.6e  %14.6e %14.6e" % (t, i, s) for t, i, s in
                      zip(x_scale, intensity, error)]))
             f.write("\n")
-            
-    def save2D(self, filename, intensity, x_scale, y_scale, error=None,
-               has_dark=False, has_flat=False,
+
+    def save2D(self, filename, intensity, x_scale=None, y_scale=None,
+               error=None, hdr_note=None, has_dark=False, has_flat=False,
                polarization_factor=None, normalization_factor=None):
         """
 
@@ -181,6 +182,7 @@ class Writer(object):
             x_scale:
             y_scale:
             error:
+            hdr_note (string):
             has_dark:
             has_flat:
             polarization_factor:
@@ -192,20 +194,22 @@ class Writer(object):
         if self._hdr_dict is None:
             self.make_header_dict(has_dark, has_flat, polarization_factor,
                                   normalization_factor)
-
         header = self._hdr_dict
-        header['== data scaling =='] = ''
-        header['x min'] = x_scale[0]
-        header['x max'] = x_scale[-1]
-        header['y min'] = y_scale[0]
-        header['y max'] = y_scale[-1]
+        if hdr_note is not None:
+            header['Note'] = hdr_note
+        if (x_scale is not None) and (y_scale is not None):
+            header['== data scaling =='] = ''
+            header['x min'] = x_scale[0]
+            header['x max'] = x_scale[-1]
+            header['y min'] = y_scale[0]
+            header['y max'] = y_scale[-1]
 
         try:
             img = fabio.edfimage.edfimage(data=intensity.astype("float32"),
                                           header=header)
-
             if error is not None:
-                img.appendFrame(data=error, header={"EDF_DataBlockID": "1.Image.Error"})
+                img.appendFrame(data=error,
+                                header={"EDF_DataBlockID": "1.Image.Error"})
             img.write(filename)
         except IOError:
             print "IOError while writing %s" % filename
