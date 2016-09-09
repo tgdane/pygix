@@ -66,3 +66,8 @@ Download the repository are run setup.py::
 
 Credits
 ----
+* pygix was written by Thomas Dane.
+* The derivation of the reciprocal space transformation was done in
+collaboration with Samuele Lilliu.
+* pygix relies heavily on the pyFAI library, and much assistance has been
+provided by `Jerome Kieffer <https://github.com/kif>`_.
