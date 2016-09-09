@@ -47,12 +47,12 @@ azimuthal integration [4].
 
 References:
 ----
-1.  N. Stribeck and U. Nöchel, J. Appl. Crystallogr., (2009), 42, 295–301
-2.  M. Polanyi, Z. Physik, (1921), 7, 149-180
-3.  S. Lilliu and T. Dane, 	arXiv:1511.06224 [cond-mat.soft]
-4.  G. Ashiotis, A. Deschildre, Z. Nawaz, J. P. Wright, D. Karkoulis, F. E.
-    Picca and J. Kieffer, J. Appl. Crystallogr., 2015, 48, 510–519
-    (https://github.com/silx-kit/pyFAI/)
+1.    N. Stribeck and U. Nöchel, J. Appl. Crystallogr., (2009), 42, 295–301
+2.    M. Polanyi, Z. Physik, (1921), 7, 149-180
+3.    S. Lilliu and T. Dane, 	arXiv:1511.06224 [cond-mat.soft]
+4.    G. Ashiotis, A. Deschildre, Z. Nawaz, J. P. Wright, D. Karkoulis, F. E.
+      Picca and J. Kieffer, J. Appl. Crystallogr., 2015, 48, 510–519
+      (https://github.com/silx-kit/pyFAI/)
 
 Installation
 ----
@@ -67,7 +67,5 @@ Download the repository are run setup.py::
 Credits
 ----
 * pygix was written by Thomas Dane.
-* The derivation of the reciprocal space transformation was done in
-collaboration with Samuele Lilliu.
-* pygix relies heavily on the pyFAI library, and much assistance has been
-provided by `Jerome Kieffer <https://github.com/kif>`_.
+* The derivation of the reciprocal space transformation was done in collaboration with Samuele Lilliu.
+* pygix relies heavily on the pyFAI library, and much assistance has been provided by `Jerome Kieffer <https://github.com/kif>`_.
