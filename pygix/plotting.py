@@ -158,7 +158,8 @@ def plot_command(x, y, logx=False, logy=False, **kwargs):
     elif logx and not logy:
         line, = plt.semilogx(x, y, **kwargs)
     elif logx and logy:
-        raise NotImplementedError('logx and logy not implemented')
+        line, = plt.loglog(x, y, basex=10, **kwargs)
+        # raise NotImplementedError('logx and logy not implemented')
     else:
         line, = plt.plot(x, y, **kwargs)
     return line
