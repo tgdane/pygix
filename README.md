@@ -16,14 +16,14 @@ can be handled at the point of data reduction.
 
 ----
 
-Please refer to the `wiki <https://github.com/tgdane/pygix/wiki>`_ for more
+Please refer to the [wiki](https://github.com/tgdane/pygix/wiki>) for more
 detailed discussion!
 
 ----
 
 Example usage:
 
-.. code-block:: python
+```python
 
     import pygix
     import pygix.plotting as pp
@@ -36,9 +36,9 @@ Example usage:
     i, qxy, qz = pg.transform_reciprocal(data)
 
     pp.implot(i, qxy, qz, xlim=())
+```
 
-..
-
+Which will generate the following image:
 ![alt text](http://i.imgur.com/Wvy8Efh.png "Example transformed image")
 
 
@@ -52,7 +52,7 @@ Pygix is heavily based on the pyFAI library for conventional 2D transmission
 azimuthal integration [4].
 
 
-References:
+References
 ----
 1.    Stribeck and Nöchel, J. Appl. Crystallogr., (2009), 42, 295–301
 2.    Polanyi, Z. Physik, (1921), 7, 149-180
@@ -63,16 +63,15 @@ References:
 
 Installation
 ----
-Download the repository are run setup.py::
-
+Download the repository are run setup.py
+```
     git clone http://github.com/tgdane/pygix.git
     cd pygix
     python setup.py install
-
-..
+```
 
 Credits
 ----
 * pygix was written by Thomas Dane.
 * The derivation of the reciprocal space transformation was done in collaboration with Samuele Lilliu.
-* pygix relies heavily on the pyFAI library, and much assistance has been provided by `Jerome Kieffer <https://github.com/kif>`_.
+* pygix relies heavily on the pyFAI library, and much assistance has been provided by [Jerome Kieffer](https://github.com/kif)
