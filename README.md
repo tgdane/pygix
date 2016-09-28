@@ -35,7 +35,7 @@ Example usage:
     # transform image into reciprocal space:
     i, qxy, qz = pg.transform_reciprocal(data)
 
-    pp.implot(i, qxy, qz, xlim=())
+    pp.implot(i, qxy, qz, xlim=(-5, 28), ylim=(-.5, 32), mode='rsm')
 ```
 
 Which will generate the following image:
