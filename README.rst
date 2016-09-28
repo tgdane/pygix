@@ -39,7 +39,7 @@ Example usage:
 
 ..
 
-![Imgur](http://i.imgur.com/Wvy8Efh.png "Example transformed image")
+![alt-text](http://i.imgur.com/Wvy8Efh.png "Example transformed image")
 
 
 Pygix uses the fiber transformation originally described by Stribeck [1] (based
