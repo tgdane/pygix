@@ -26,14 +26,21 @@ Example usage:
 .. code-block:: python
 
     import pygix
-    
+    import pygix.plotting as pp
+
     pg = pygix.Transform()
     pg.load('detector_calibration.poni')
     pg.indcident_angle = 0.2
 
     # transform image into reciprocal space:
     i, qxy, qz = pg.transform_reciprocal(data)
+
+    pp.implot(i, qxy, qz, xlim=())
+
 ..
+
+![Imgur](http://i.imgur.com/Wvy8Efh.png "Example transformed image")
+
 
 Pygix uses the fiber transformation originally described by Stribeck [1] (based
 on earlier work by Polayni [2]), which has recently been formulated for the case
@@ -47,11 +54,11 @@ azimuthal integration [4].
 
 References:
 ----
-1.    N. Stribeck and U. Nöchel, J. Appl. Crystallogr., (2009), 42, 295–301
-2.    M. Polanyi, Z. Physik, (1921), 7, 149-180
-3.    S. Lilliu and T. Dane, 	arXiv:1511.06224 [cond-mat.soft]
-4.    G. Ashiotis, A. Deschildre, Z. Nawaz, J. P. Wright, D. Karkoulis, F. E.
-      Picca and J. Kieffer, J. Appl. Crystallogr., 2015, 48, 510–519
+1.    Stribeck and Nöchel, J. Appl. Crystallogr., (2009), 42, 295–301
+2.    Polanyi, Z. Physik, (1921), 7, 149-180
+3.    Lilliu and Dane, 	arXiv:1511.06224 [cond-mat.soft]
+4.    Ashiotis, Deschildre, Nawaz, Wright, Karkoulis,
+      Picca and Kieffer, J. Appl. Crystallogr., 2015, 48, 510–519
       (https://github.com/silx-kit/pyFAI/)
 
 Installation
