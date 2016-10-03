@@ -1,6 +1,8 @@
 numpy
-scipy
-matplotlib
+#scipy
+#matplotlib
 cython
 fabio
 pyFAI
+sphinx
+sphinxcontrib-programoutput
