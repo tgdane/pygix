@@ -28,7 +28,7 @@ DRY_RUN = len(sys.argv) == 1 or (len(sys.argv) >= 2 and (
 
 def get_version():
     import version
-    return version.strictversion
+    return version.strict_version
 
 
 def get_readme():

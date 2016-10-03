@@ -8,10 +8,10 @@ _version_info = namedtuple(
     "version_info", ["major", "minor", "micro", "releaselevel", "serial"])
 
 MAJOR = 0
-MINOR = 0
-MICRO = 1
+MINOR = 1
+MICRO = 4
 RELEV = "dev"  # <16
-SERIAL = 3  # <16
+SERIAL = 0  # <16
 
 version_info = _version_info(MAJOR, MINOR, MICRO, RELEV, SERIAL)
 
@@ -35,3 +35,6 @@ hex_version |= RELEASE_LEVEL_VALUE.get(version_info[3], 0) * 1 << 4
 hex_version |= version_info[2] * 1 << 8
 hex_version |= version_info[1] * 1 << 16
 hex_version |= version_info[0] * 1 << 24
+
+if __name__ == '__main__':
+    print version
