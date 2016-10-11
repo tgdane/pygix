@@ -63,15 +63,23 @@ References
 
 Installation
 ----
-Download the repository are run setup.py
+In the near future, pygix will be available via PIP. In the meantime, download
+the source code in .zip format from the github
+[repository](https://github.com/tgdane/pygix/archive/master.zip) and unpack it.
+
 ```
-    git clone http://github.com/tgdane/pygix.git
-    cd pygix
-    python setup.py install
+    unzip pygix-master.zip
+```
+
+Go to the `pygix-master` directory, build and install the package:
+
+```
+    cd pygix-master
+    python setup.py build install
 ```
 
 Credits
 ----
-* pygix was written by Thomas Dane.
+* pygix was written by Thomas Dane with contributions and assistance from [Jerome Kieffer](https://github.com/kif).
 * The derivation of the reciprocal space transformation was done in collaboration with Samuele Lilliu.
-* pygix relies heavily on the pyFAI library, and much assistance has been provided by [Jerome Kieffer](https://github.com/kif)
+* pygix relies heavily on the [pyFAI](https://github.com/silx-kit/pyFAI/) library.
