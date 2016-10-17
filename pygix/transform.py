@@ -1,9 +1,35 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+#
+#    Copyright (C) European Synchrotron Radiation Facility, Grenoble, France
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 """
 Main module of pygix that users will interact with.
 """
+from __future__ import absolute_import, print_function, division
+
+__authors__ = ["Thomas Dane", "Jérôme Kieffer"]
+__license__ = "GPLv3+"
+__date__ = "18/03/2016"
+__contact__ = "thomasgdane@gmail.com"
+__license__ = "GPLv3+"
+__copyright__ = "2016 ESRF - The European Synchrotron, Grenoble, France"
+__status__ = "Development"
+__docformat__ = "restructuredtext"
 
 import os
 import logging
@@ -35,7 +61,7 @@ except ImportError as error:  # IGNORE:W0703
     splitBBoxLUT = None
 
 try:
-    from pyFAI.fastcrc import crc32
+    from pyFAI.ext.fastcrc import crc32
 except ImportError:
     from zlib import crc32
 
