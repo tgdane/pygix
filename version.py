@@ -66,4 +66,4 @@ hexversion |= version_info[1] * 1 << 16
 hexversion |= version_info[0] * 1 << 24
 
 if __name__ == '__main__':
-    print version
+    print(version)
