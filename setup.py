@@ -31,7 +31,6 @@ __license__ = "MIT"
 
 import sys
 import os
-import platform
 
 from numpy.distutils.misc_util import Configuration
 
@@ -64,7 +63,7 @@ def get_version():
 
 def get_readme():
     dirname = os.path.dirname(os.path.abspath(__file__))
-    with open(os.path.join(dirname, "README.md"), "r") as fp:
+    with open(os.path.join(dirname, "README.md"), "r", encoding='utf-8') as fp:
         long_description = fp.read()
     return long_description
 
