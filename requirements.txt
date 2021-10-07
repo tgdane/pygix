@@ -4,5 +4,9 @@ numpy
 cython
 fabio
 pyFAI
-sphinx
-sphinxcontrib-programoutput
+PyYAML
+# Those are optional build dependencies. It's better to create a separate
+# `requirements-dev.txt` file and install the sphinx dependencies from it prior
+# to the installation.
+# sphinx
+# sphinxcontrib-programoutput
