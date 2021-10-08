@@ -212,7 +212,7 @@ class Writer(object):
                                 header={"EDF_DataBlockID": "1.Image.Error"})
             img.write(filename)
         except IOError:
-            print "IOError while writing %s" % filename
+            print("IOError while writing %s" % filename)
 
 
 def make_roi_header(**param):

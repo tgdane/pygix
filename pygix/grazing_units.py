@@ -149,7 +149,7 @@ GI_UNITS = (TTH_DEG, TTH_RAD, Q_NM, Q_A)
 
 def to_unit(obj):
     giUnit = None
-    if type(obj) in types.StringTypes:
+    if isinstance(obj, str):
         for one_unit in GI_UNITS:
             if one_unit.REPR == obj:
                 giUnit = one_unit
@@ -221,7 +221,7 @@ def op_unit(obj):
 
 def absolute_unit(obj):
     abs_giUnit = None
-    print type(obj)
+    print(type(obj))
     if type(obj) in types.StringTypes:
         for one_unit in ABS_UNITS:
             if one_unit.REPR == obj:
@@ -233,6 +233,6 @@ def absolute_unit(obj):
         logger.error("Unable to recognize this type unit '%s' of type %s. "
                      "Valid units are 2th_deg, 2th_rad, q_nm^-1, q_A^-1 and r_mm"\
                      % (obj, type(obj)))
-    print abs_giUnit
+    print(abs_giUnit)
     return abs_giUnit        
 
