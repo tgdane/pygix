@@ -105,7 +105,7 @@ class Writer(object):
 
         hdr_list = []
         for k, v in header_dict.items():
-            if (v.__class__ is str) and (len(v) is 0):
+            if v == "":
                 hdr_list.append(k)
             else:
                 hdr_list.append('{}: {}'.format(k, v))
