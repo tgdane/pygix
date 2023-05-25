@@ -24,7 +24,7 @@ from __future__ import absolute_import, print_function, division
 
 __authors__ = ["Thomas Dane", "Jérôme Kieffer"]
 __license__ = "GPLv3+"
-__date__ = "18/03/2016"
+__date__ = "25/05/2023"
 __contact__ = "thomasgdane@gmail.com"
 __license__ = "GPLv3+"
 __copyright__ = "2016 ESRF - The European Synchrotron, Grenoble, France"
@@ -48,7 +48,7 @@ from . import grazing_geometry
 GrazingGeometry = grazing_geometry.GrazingGeometry
 from . import grazing_units
 from . import io
-import pyFAI
+import pyFAI, pyFAI.average
 import fabio
 
 error = None
@@ -105,27 +105,27 @@ from pyFAI.opencl import ocl
 
 if ocl:
     try:
-        from pyFAI import ocl_azim  # IGNORE:F0401
+        from pyFAI.opencl import azim_hist as  ocl_azim  # IGNORE:F0401
     except ImportError as error:  # IGNORE:W0703
-        logger.warning("Unable to import pyFAI.ocl_azim"
+        logger.warning("Unable to import pyFAI.opencl.azim_hist"
                        ": %s" % error)
         ocl_azim = None
     try:
-        from pyFAI import ocl_azim_csr  # IGNORE:F0401
+        from pyFAI.opencl import azim_csr as ocl_azim_csr  # IGNORE:F0401
     except ImportError as error:
-        logger.error("Unable to import pyFAI.ocl_azim_csr"
+        logger.error("Unable to import pyFAI.opencl.azim_csr"
                      ": %s" % error)
         ocl_azim_csr = None
     try:
-        from pyFAI import ocl_azim_lut  # IGNORE:F0401
+        from pyFAI.opencl import azim_lut as ocl_azim_lut  # IGNORE:F0401
     except ImportError as error:  # IGNORE:W0703
-        logger.error("Unable to import pyFAI.ocl_azim_lut for"
+        logger.error("Unable to import pyFAI.opencl.azim_lut for"
                      ": %s" % error)
         ocl_azim_lut = None
     try:
-        from pyFAI import ocl_sort
+        from pyFAI.opencl import sort as ocl_sort
     except ImportError as error:  # IGNORE:W0703
-        logger.error("Unable to import pyFAI.ocl_sort for"
+        logger.error("Unable to import pyFAI.opencl.sort for"
                      ": %s" % error)
         ocl_sort = None
 else:
@@ -364,7 +364,7 @@ class Transform(GrazingGeometry):
             np.logical_not(mask, mask)
         if mask.shape != shape:
             try:
-                mask = mask[:shape[0], :shape[1]]
+                mask = mask[:shape[0],:shape[1]]
             except Exception as error:  # IGNORE:W0703
                 logger.error("Mask provided has wrong shape:"
                              " expected: %s, got %s, error: %s" %
@@ -413,8 +413,8 @@ class Transform(GrazingGeometry):
             pos1_maxin = pos1.max()
             default_pos1 = True
 
-        pos0Range = (pos0_min, pos0_maxin * EPS32)
-        pos1Range = (pos1_min, pos1_maxin * EPS32)
+        pos0_range = (pos0_min, pos0_maxin * EPS32)
+        pos1_range = (pos1_min, pos1_maxin * EPS32)
 
         if mask is None:
             mask_checksum = None
@@ -424,8 +424,8 @@ class Transform(GrazingGeometry):
         if int2d:
             gi_lut = splitBBoxLUT.HistoBBox2d(pos0, dpos0, pos1, dpos1,
                                               bins=npt,
-                                              pos0Range=pos0Range,
-                                              pos1Range=pos1Range,
+                                              pos0_range=pos0_range,
+                                              pos1_range=pos1_range,
                                               mask=mask,
                                               mask_checksum=mask_checksum,
                                               allow_pos0_neg=True,
@@ -433,8 +433,8 @@ class Transform(GrazingGeometry):
         else:
             gi_lut = splitBBoxLUT.HistoBBox1d(pos0, dpos0, pos1, dpos1,
                                               bins=npt,
-                                              pos0Range=pos0Range,
-                                              pos1Range=pos1Range,
+                                              pos0_range=pos0_range,
+                                              pos1_range=pos1_range,
                                               mask=mask,
                                               mask_checksum=mask_checksum,
                                               allow_pos0_neg=True,
@@ -487,8 +487,8 @@ class Transform(GrazingGeometry):
             pos1_maxin = pos1.max()
             default_pos1 = True
 
-        pos0Range = (pos0_min, pos0_maxin * EPS32)
-        pos1Range = (pos1_min, pos1_maxin * EPS32)
+        pos0_range = (pos0_min, pos0_maxin * EPS32)
+        pos1_range = (pos1_min, pos1_maxin * EPS32)
         
         if mask is None:
             mask_checksum = None
@@ -498,8 +498,8 @@ class Transform(GrazingGeometry):
         if int2d:
             gi_lut = splitBBoxLUT.HistoBBox2d(pos0, dpos0, pos1, dpos1,
                                               bins=npt,
-                                              pos0Range=pos0Range,
-                                              pos1Range=pos1Range,
+                                              pos0_range=pos0_range,
+                                              pos1_range=pos1_range,
                                               mask=mask,
                                               mask_checksum=mask_checksum,
                                               allow_pos0_neg=True,
@@ -507,8 +507,8 @@ class Transform(GrazingGeometry):
         else:
             gi_lut = splitBBoxLUT.HistoBBox1d(pos0, dpos0, pos1, dpos1,
                                               bins=npt,
-                                              pos0Range=pos0Range,
-                                              pos1Range=pos1Range,
+                                              pos0_range=pos0_range,
+                                              pos1_range=pos1_range,
                                               mask=mask,
                                               mask_checksum=mask_checksum,
                                               allow_pos0_neg=True,
@@ -549,8 +549,8 @@ class Transform(GrazingGeometry):
         if process in ["chi", "opbox"]:
             if "corner" in typ:
                 temp = np.zeros((shape[0], shape[1], 4, 2))
-                temp[:, :, :, 0] = out[:, :, :, 1]
-                temp[:, :, :, 1] = out[:, :, :, 0]
+                temp[:,:,:, 0] = out[:,:,:, 1]
+                temp[:,:,:, 1] = out[:,:,:, 0]
                 out = temp
             else:
                 out = (out[1], out[0])
@@ -836,7 +836,7 @@ class Transform(GrazingGeometry):
                     not self._lut_gi_transformer.default_ipl):
                         reset = "x_range was defined in LUT"
                     elif (x_range is not None) and \
-                            (self._lut_gi_transformer.pos0Range != (
+                            (self._lut_gi_transformer.pos0_range != (
                             min(x_range), max(x_range) * EPS32)):
                         reset = ("x_range is defined"
                                  " but not the same as in LUT")
@@ -844,7 +844,7 @@ class Transform(GrazingGeometry):
                         y_range is None) and not self._lut_gi_transformer.default_opl:
                         reset = "y_range not defined and LUT had y_range defined"
                     elif (y_range is not None) and \
-                            (self._lut_gi_transformer.pos1Range != (
+                            (self._lut_gi_transformer.pos1_range != (
                             min(y_range), max(y_range) * EPS32)):
                         reset = "y_range requested and LUT's y_range don't match"
                 error = False
@@ -966,7 +966,7 @@ class Transform(GrazingGeometry):
                             self._csr_gi_transformer.default_ipl:
                         reset = "x_range was defined in CSR"
                     elif (x_range is not None) and \
-                            (self._csr_gi_transformer.pos0Range != \
+                            (self._csr_gi_transformer.pos0_range != \
                             (min(x_range), max(x_range) * EPS32)):
                         reset = ("x_range is defined"
                                  " but not the same as in CSR")
@@ -975,7 +975,7 @@ class Transform(GrazingGeometry):
                         reset = ("y_range not defined and"
                                  " CSR had y_range defined")
                     elif (y_range is not None) and \
-                            (self._csr_gi_transformer.pos1Range != \
+                            (self._csr_gi_transformer.pos1_range != \
                             (min(y_range), max(y_range) * EPS32)):
                         reset = ("y_range requested and"
                                  " CSR's y_range don't match")
@@ -1007,8 +1007,8 @@ class Transform(GrazingGeometry):
                     pos=pos,
                     weights=data,
                     bins=npt,
-                    pos0Range=x_range,
-                    pos1Range=y_range,
+                    pos0_range=x_range,
+                    pos1_range=y_range,
                     dummy=dummy,
                     delta_dummy=delta_dummy,
                     mask=mask, dark=dark, flat=flat,
@@ -1036,8 +1036,8 @@ class Transform(GrazingGeometry):
                     pos1=pos1,
                     delta_pos1=dpos1,
                     bins=npt,
-                    pos0Range=x_range,
-                    pos1Range=y_range,
+                    pos0_range=x_range,
+                    pos1_range=y_range,
                     dummy=dummy,
                     delta_dummy=delta_dummy,
                     mask=mask, dark=dark, flat=flat,
@@ -1500,14 +1500,14 @@ class Transform(GrazingGeometry):
                         p0_range is None) and not self._lut_gi_integrator.default_p0:
                         reset = "p0_range was defined in LUT"
                     elif (p0_range is not None) and \
-                            (self._lut_gi_integrator.pos0Range != (
+                            (self._lut_gi_integrator.pos0_range != (
                             min(p0_range), max(p0_range) * EPS32)):
                         reset = "p0_range is defined but not the same as in LUT"
                     if (
                         p1_range is None) and not self._lut_gi_integrator.default_p1:
                         reset = "p1_range not defined and LUT had p1_range defined"
                     elif (p1_range is not None) and \
-                            (self._lut_gi_integrator.pos1Range != (
+                            (self._lut_gi_integrator.pos1_range != (
                             min(p1_range), max(p1_range) * EPS32)):
                         reset = "p1_range requested and LUT's p1_range don't match"
                 if reset:
@@ -1564,7 +1564,7 @@ class Transform(GrazingGeometry):
                                         devicetype=devicetype,
                                         platformid=platformid,
                                         deviceid=deviceid,
-                                        checksum= \
+                                        checksum=\
                                             self._lut_gi_integrator.lut_checksum)
 
                             I, _, _ = self._ocl_lut_gi_integrator.integrate(
@@ -1574,7 +1574,7 @@ class Transform(GrazingGeometry):
                                 dummy=dummy,
                                 delta_dummy=delta_dummy,
                                 polarization=polarization,
-                                polarization_checksum= \
+                                polarization_checksum=\
                                     self._polarization_crc)
 
                             qAxis = self._lut_gi_integrator.outPos  # this will be copied later
@@ -1625,8 +1625,8 @@ class Transform(GrazingGeometry):
                     pos=pos,
                     weights=data,
                     bins=npt,
-                    pos0Range=p0_range,
-                    pos1Range=p1_range,
+                    pos0_range=p0_range,
+                    pos1_range=p1_range,
                     dummy=dummy,
                     delta_dummy=delta_dummy,
                     mask=mask,
@@ -1643,8 +1643,8 @@ class Transform(GrazingGeometry):
                         pos=pos,
                         weights=variance,
                         bins=npt,
-                        pos0Range=p0_range,
-                        pos1Range=p1_range,
+                        pos0_range=p0_range,
+                        pos1_range=p1_range,
                         dummy=dummy,
                         delta_dummy=delta_dummy,
                         mask=mask)
@@ -1671,8 +1671,8 @@ class Transform(GrazingGeometry):
                     pos1=chi,
                     delta_pos1=dchi,
                     bins=npt,
-                    pos0Range=p0_range,
-                    pos1Range=p1_range,
+                    pos0_range=p0_range,
+                    pos1_range=p1_range,
                     dummy=dummy,
                     delta_dummy=delta_dummy,
                     mask=mask,
@@ -1691,8 +1691,8 @@ class Transform(GrazingGeometry):
                         pos1=chi,
                         delta_pos1=dchi,
                         bins=npt,
-                        pos0Range=p0_range,
-                        pos1Range=p1_range,
+                        pos0_range=p0_range,
+                        pos1_range=p1_range,
                         dummy=dummy,
                         delta_dummy=delta_dummy,
                         mask=mask)
@@ -1922,7 +1922,7 @@ class Transform(GrazingGeometry):
         method : str 
             Method used to compute the dark. Can be "mean" or "median".
         """
-        if type(files) in types.StringTypes:
+        if isinstance(files, (str, bytes)):
             files = [i.strip() for i in files.split(",")]
         elif not files:
             files = []
@@ -1933,7 +1933,7 @@ class Transform(GrazingGeometry):
                 fabio.open(files[0]).data.astype(np.float32))
             self.darkfiles = files[0]
         else:
-            self.set_darkcurrent(pyFAI.utils.averageImages(
+            self.set_darkcurrent(pyFAI.average.average_images(
                 files, filter_=method,
                 format=None, threshold=0))
             self.darkfiles = "%s(%s)" % (method, ",".join(files))
@@ -1950,7 +1950,7 @@ class Transform(GrazingGeometry):
         method : str 
             Method used to compute the flat. Can be "mean" or "median".
         """
-        if type(files) in types.StringTypes:
+        if isinstance(files, (str, bytes)):
             files = [i.strip() for i in files.split(",")]
         elif not files:
             files = []
@@ -1960,7 +1960,7 @@ class Transform(GrazingGeometry):
             self.set_flatfield(fabio.open(files[0]).data.astype(np.float32))
             self.flatfiles = files[0]
         else:
-            self.set_flatfield(pyFAI.utils.averageImages(
+            self.set_flatfield(pyFAI.average.average_images(
                 files, filter_=method,
                 format=None, threshold=0))
             self.flatfiles = "%s(%s)" % (method, ",".join(files))
