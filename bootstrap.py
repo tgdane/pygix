@@ -10,8 +10,7 @@ example: ./bootstrap.py ipython
 __authors__ = ["Frédéric-Emmanuel Picca", "Jérôme Kieffer"]
 __contact__ = "jerome.kieffer@esrf.eu"
 __license__ = "MIT"
-__date__ = "15/09/2016"
-
+__date__ = "25/05/2023"
 
 import sys
 import os
@@ -25,10 +24,11 @@ def _distutils_dir_name(dname="lib"):
     """
     Returns the name of a distutils build directory
     """
-    platform = distutils.util.get_platform()
-    architecture = "%s.%s-%i.%i" % (dname, platform,
-                                    sys.version_info[0], sys.version_info[1])
-    return architecture
+    return dname
+    # platform = distutils.util.get_platform()
+    # architecture = "%s.%s-%i.%i" % (dname, platform,
+    #                                 sys.version_info[0], sys.version_info[1])
+    # return architecture
 
 
 def _distutils_scripts_name():
@@ -48,6 +48,7 @@ def _get_available_scripts(path):
 
 
 if sys.version_info[0] >= 3:  # Python3
+
     def execfile(fullpath):
         "Python3 implementation for execfile"
         with open(fullpath) as f:
@@ -65,6 +66,7 @@ def runfile(fname):
                     "PATH": SCRIPTSPATH + os.pathsep + os.environ.get("PATH", "")})
         run = subprocess.Popen(sys.argv, shell=False, env=env)
         run.wait()
+
 
 home = os.path.dirname(os.path.abspath(__file__))
 SCRIPTSPATH = os.path.join(home, 'build', _distutils_scripts_name())
