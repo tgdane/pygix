@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -43,7 +44,7 @@ latexpre = [r'\usepackage{siunitx}',
             r'\usepackage{helvet}',
             r'\usepackage[EULERGREEK]{sansmath}',
             r'\sansmath']
-mpl.rcParams['text.latex.preamble'] = latexpre
+mpl.rcParams['text.latex.preamble'] = os.linesep.join(latexpre)
 
 DEFAULT_UNIT = 'nm^-1'
 LABELS_DICT = {
@@ -89,7 +90,7 @@ def get_axis_label(label=None):
     Returns:
 
     """
-    if (label is None) or (len(label) is 0):
+    if (label is None) or (len(label) == 0):
         return ''
     if '(' in label:
         quantity, unit = label.split('(')
@@ -264,7 +265,6 @@ def plot(x, y,
     if show:
         plt.show()
 
-
 # def rsmplot(data, x=None, y=None, xlim=None, ylim=None,
 #             xlabel=None, ylabel=None, cmap=None, colorbar=False, clim='auto',
 #             newfig=True, show=True, figsize=(7, 7), tight_layout=True,
@@ -386,7 +386,7 @@ def implot(data, x=None, y=None, mode=None,
         cax = divider.append_axes("right", size="5%", pad=0.05)
         plt.colorbar(im, cax=cax)
 
-    ax.set_axis_bgcolor(colormap(0))
+    ax.set_facecolor(colormap(0))
 
     if tight_layout:
         plt.tight_layout()

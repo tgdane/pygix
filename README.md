@@ -30,7 +30,7 @@ Example usage:
 
     pg = pygix.Transform()
     pg.load('detector_calibration.poni')
-    pg.indcident_angle = 0.2
+    pg.incident_angle = 0.2
 
     # transform image into reciprocal space:
     i, qxy, qz = pg.transform_reciprocal(data)

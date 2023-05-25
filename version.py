@@ -27,8 +27,7 @@
 
 __authors__ = ["Jérôme Kieffer"]
 __license__ = "MIT"
-__date__ = "17/03/2016"
-
+__date__ = "25/05/2023"
 
 # Do not copy into the source folder !
 
@@ -36,10 +35,10 @@ from collections import namedtuple
 _version_info = namedtuple(
     "version_info", ["major", "minor", "micro", "releaselevel", "serial"])
 
-MAJOR = 0
-MINOR = 1
-MICRO = 4
-RELEV = "dev"  # <16
+MAJOR = 2023
+MINOR = 5
+MICRO = 25
+RELEV = "final"  # <16
 SERIAL = 0  # <16
 
 version_info = _version_info(MAJOR, MINOR, MICRO, RELEV, SERIAL)
